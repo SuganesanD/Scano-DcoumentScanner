@@ -1,24 +1,44 @@
+.maincontainer{
+    display: flex;
+    gap: 20px;
+}
+.filehistory{
+   padding: 10px;
+   flex: 1;
+   height: 100vh;
+   overflow-y: scroll;
+   scrollbar-width: none; /* Hides scrollbar in Firefox */
+   -ms-overflow-style: none; 
 
+}
+
+.filehistory::-webkit-scrollbar {
+    display: none;
+  }
 .topcontainer{
     align-self: center;
     padding: 20px;
 }
+.box1 {
+    width: 20%;
+    
+  }
 
 .chartcontainer{
     display: flex;
     justify-content: center;
     align-items: center;
     margin: 0px  20px;
-    width: 30%;
-    box-shadow: 0px 2px 6px 6px rgb(233, 232, 232);
-    border-radius: 20px;
+    width: 40%;
+    box-shadow: 2px 5px 3px 3px rgb(233, 232, 232);
+    border-radius: 10px;
 }
 .screen{
     height: 100vh;
     display: flex;
 }
 .sidebar{
-    width: 30%;
+    width: 20%;
     background-color: whitesmoke;
 }
 .container{
@@ -27,6 +47,73 @@
     width: 100%;
     height: 100%;
 }
+
+.togglecontainer{
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    gap: 10px;
+    max-width: 1200px;
+    margin: 10px 10px;
+}
+
+/* Toggle Switch Container */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+  }
+  
+  /* Hide Default Checkbox */
+  .toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  /* Toggle Slider */
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 34px;
+  }
+  
+  /* Moving Slider Circle */
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+  }
+  
+  /* Toggle ON State */
+  input:checked + .slider {
+    background-color: #007bff;
+  }
+  
+  input:checked + .slider:before {
+    transform: translateX(26px);
+  }
+  
+  /* Additional Styling for Sort Order Text */
+  p {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+  
 form {
     
     height: 50px;
@@ -131,6 +218,15 @@ button {
     font-size: 14px;
     border-radius: 5px;
     transition: 0.3s;
+    background-color: #b7d7f8;
+}
+
+.actionsbuttons{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    padding: 5px;
 }
 
 #download {

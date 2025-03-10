@@ -11,11 +11,12 @@ import { Document, Packer, Paragraph } from 'docx';
 import { CouchService } from '../../Services/couch.service';
 import * as d3 from 'd3';
 import { style } from '@angular/animations';
+import { SidebarComponent } from "../sidebar/sidebar.component";
 
 @Component({
   selector: 'app-file-history',
   standalone: true,
-  imports: [FormsModule, HttpClientModule, CommonModule, PdfViewerModule],
+  imports: [FormsModule, HttpClientModule, CommonModule, PdfViewerModule, SidebarComponent],
   templateUrl: './file-history.component.html',
   styleUrl: './file-history.component.css'
 })
@@ -108,6 +109,24 @@ export class FileHistoryComponent implements OnInit  {
     });
   }
 
+  sortOrder: 'asc' | 'desc' = 'asc';
+
+  toggleSortOrder() {
+    this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
+    this.sortDocuments()
+  }
+
+
+
+sortDocuments() {
+  this.getdata.sort((a, b) => {
+    const dateA = new Date(a.date).getTime();
+    const dateB = new Date(b.date).getTime();
+    return this.sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+  });
+}
+
+
  
   processData(data: any[]) {
     const formatCounts: { [key: string]: number } = {};
@@ -137,15 +156,15 @@ export class FileHistoryComponent implements OnInit  {
     const containerWidth = container.clientWidth; // Get container width
     const containerHeight = container.clientHeight || 300; // Default to 300 if not set
   
-    const legendWidth = 150; // Extra space for the legend
+    const legendWidth = 130; // Extra space for the legend
     const width = containerWidth - legendWidth; // Adjust width dynamically
     const height = containerHeight;
     const radius = Math.min(width, height) / 2;
-    const innerRadius = radius -50;// Increase the total width
+    const innerRadius = radius -30;// Increase the total width
   
     const svg = d3.select("#chart")
       .append("svg")
-      .attr("width", containerWidth-20) // Wider canvas for legend space
+      .attr("width", containerWidth-50) // Wider canvas for legend space
       .attr("height", height)
       .append("g")
       .attr("transform", `translate(${width / 2}, ${height / 2})`);

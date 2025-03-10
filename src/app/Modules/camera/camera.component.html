@@ -27,13 +27,15 @@
 
     
 </div>
+<p>{{extractedText}}</p>
+<app-chat-bot [extractedText]="extractedText"></app-chat-bot>
 
 
   
   
   
 
-  <div class="chat-container">
+  <!-- <div class="chat-container">
     <div class="chat-box">
       <div class="chat-message">
         <p>{{ extractedTextfinal}}</p>
@@ -48,6 +50,7 @@
       (keyup.enter)="sendMessage()"
     />
     <button (click)="sendMessage()">Send</button>
-    <button (click)="addtocouch()">add</button>
-  </div>
+    <button *ngIf="userid" (click)="addtocouch()">add</button>
+    <p>{{userid}}</p>
+  </div> -->
  

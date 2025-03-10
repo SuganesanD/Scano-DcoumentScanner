@@ -8,14 +8,6 @@
   
       <!-- Summary Section Below Upload -->
       <div class="summary-section">
-        <!-- <div class="download-controls">
-          <button id="downloadbutton" (click)="downloadsummarized()" [disabled]="!summarizedContent">⬇ Download</button>
-          <select [(ngModel)]="selectedFormat" class="custom-select">
-            <option value="pdf">📄 PDF</option>
-            <option value="doc">📑 DOC</option>
-            <option value="txt">📝 TXT</option>
-          </select>
-        </div> -->
         <h3> Summarized Content</h3>
         <p *ngIf="summarizedContent">{{ summarizedContent }}</p>
         <div *ngIf="!summarizedContent" class="chatsummary">
@@ -69,9 +61,12 @@
           </div>
   
   
-          <div *ngIf="selectedText " class="selected-text-display">
+          <div *ngIf="selectedTextval" class="selected-text-display">
+            <div class="selectedTextHeading" style="display: flex;justify-content: space-between;">
             <p><strong>Selected Text:</strong></p>
-            <p (click)="resetSelection()" style="cursor: pointer;">X</p>
+            <button (click)="resetSelection()" style="cursor: pointer;width: 30px;background-color: black;color: white;">x</button>
+            </div>
+            
             <textarea [(ngModel)]="selectedText"></textarea>
             <button (click)="addSelectedContent()" [disabled]="!selectedText">Add Selected Content</button>
           </div>

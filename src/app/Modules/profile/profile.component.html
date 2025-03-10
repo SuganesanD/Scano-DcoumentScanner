@@ -1,67 +1,46 @@
-
-<div class="profile-container">
-    <!-- Edit Button -->
-    
-
-
-    <!-- Left Side: Profile Photo -->
-    <div class="profile-left">
-
-        <input type="file" (change)="onImageChange($event)"   [disabled]="isDisableEditing" />
-        <img *ngIf="images" [src]="images" alt="Profile" />
+<div class="maincontainer">
+    <div class="box box1">
+      <app-sidebar></app-sidebar>
     </div>
-
-    <!-- Right Side: User Details -->
-    <div class="profile-right">
-        <button class="edit-btn" (click)="editProfile()" >Edit</button>
-
+<div class="profile-container">
+    <!-- Left Side: Profile Form -->
+    <div class="profile-form">
+        <button class="edit-btn"  (click)="editProfile()">Edit</button>
         <h2>Profile Information</h2>
         <div class="info">
-            <div class="row">
-                <div class="column">
-                    <label for="firstname">First Name:</label>
-                    <input type="text"  [disabled]="isDisableEditing" placeholder="Enter the firstName" [(ngModel)]="firstName" pattern="^[a-zA-Z]{3,16}$" required>
-
-                </div>
-                <div class="column">
-                    <label for="lastname">Last Name:</label>
-                    <input type="text"  [disabled]="isDisableEditing" placeholder="enter the lastName" [(ngModel)]="lastName" pattern="^[a-zA-Z]{1,16}$" required>
-                </div>
-            </div>
-            <div class="row">
-                <div class="column">
-                    <label for="username">Username</label>
-                    <input type="text"  pattern="^[a-zA-Z0-9._]{6,15}$" [disabled]="isDisableEditing" pattern="^[a-zA-Z]{3,16}$" placeholder="Username"
-                        [(ngModel)]="userName" required>
-                </div>
-            </div>
-            <div class="row">
-                <div class="column">
-                    <label for="email">Email:</label>
-                    <input type="email"  disabled="true" placeholder="enter your email" [(ngModel)]="email" required>
-                </div>
-            </div>
-            <div class="row">
-                <div class="column">
-                    <label for="phonenumber">Phone:</label>
-                    <input type="text"  [disabled]="isDisableEditing" placeholder=" enter the phoneNumber" [(ngModel)]="phoneNumber" pattern="^[6-9]\d{9}$"  required>
-                </div>
-            </div>
-            <div class="row">
-                <div class="column">
-                    <label for="gender">Gender:</label>
-                    <select id="gender" name="gender" [(ngModel)]="gender" [disabled]="isDisableEditing" >
-                        <option value="">Select Gender</option>
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                        <option value="others">Others</option>
-                    </select>
-                    
-                </div>
-            </div>
+            <label>First Name:</label>
+            <input type="text" [(ngModel)]="firstName" [disabled]="isDisableEditing">
+            
+            <label>Last Name:</label>
+            <input type="text" [(ngModel)]="lastName" [disabled]="isDisableEditing">
+            
+            <label>Username:</label>
+            <input type="text" [(ngModel)]="userName" [disabled]="isDisableEditing">
+            
+            <label>Email:</label>
+            <input type="email" [(ngModel)]="email" disabled>
+            
+            <label>Phone:</label>
+            <input type="text" [(ngModel)]="phoneNumber" [disabled]="isDisableEditing">
+            
+            <label>Gender:</label>
+            <select [(ngModel)]="gender" [disabled]="isDisableEditing">
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="others">Others</option>
+            </select>
         </div>
-        <div class="save-btn">
-            <button (click)="saveDetail()" [disabled]="isDisableEditing" >Save Changes</button>
-        </div>
+        <button class="save-btn" (click)="saveDetail()" [disabled]="isDisableEditing">Save Changes</button>
     </div>
+    
+    <!-- Right Side: Profile Image -->
+    <div class="profile-image">
+        <img [src]="images ||  'assets/images/user.png'" alt="Profile" class="profile-pic">
+        <label class="upload-indicator">
+            <input type="file" (change)="onImageChange($event)"  [disabled]="isDisableEditing" hidden>
+            <span>+</span>
+        </label>
+    </div>
+</div>
 </div>

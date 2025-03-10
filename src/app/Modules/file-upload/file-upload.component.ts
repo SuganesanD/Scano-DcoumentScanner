@@ -31,6 +31,7 @@ export class FileUploadComponent {
   selectedFormat: string = 'txt';
   selectedSummaryLevel: string = '';
   uploadvalue:boolean=false
+  selectedTextval:boolean=false
 
   documentid:string=''
   userid:string="user_2_81115f40-d069-48d1-995b-abd58f13e10b"
@@ -275,6 +276,7 @@ afterLoadComplete(pdf: any) {
     const selection = window.getSelection();
     if (selection && selection.toString()) {
       this.selectedText = selection.toString();
+      this.selectedTextval=true
     }
   }
 
@@ -284,6 +286,7 @@ afterLoadComplete(pdf: any) {
       this.selectedContents.push(this.selectedText);
       console.log(this.selectedText);
       this.selectedText = '';
+      this.selectedTextval=false
     // Reset selected text after adding it
       
       
@@ -301,7 +304,7 @@ afterLoadComplete(pdf: any) {
 
   // Reset the selection (if needed for UX improvements)
   resetSelection() {
-    this.selectedText = '';
+    this.selectedTextval= false;
   }
 
   removeSelectedContent(index: number) {
@@ -411,7 +414,7 @@ sendMessage(): void {
     this.messages.push('You: ' + concatenatedMessage);
 
     // Get response from the chatbot API
-    this.chatbotService.getResponse(concatenatedMessage,this.selectedSummaryLevel).subscribe(response => {
+    this.chatbotService.getResponse(concatenatedMessage,`Give me ${this.selectedSummaryLevel} lines of general paragraph on`).subscribe(response => {
       this.summarizedContent=response.candidates[0].content.parts[0].text;
       concatenatedMessage=''
     });
@@ -651,6 +654,7 @@ selectFullImage() {
       .then(({ data: { text } }) => {
         this.selectedText=text
         // this.selectedContents.push(text);
+        this.selectedTextval=true
       })
       .catch((error) => console.error('OCR Error:', error));
   }

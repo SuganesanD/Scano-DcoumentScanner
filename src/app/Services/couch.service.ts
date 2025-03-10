@@ -17,6 +17,8 @@ export class CouchService {
     'Content-Type': 'application/json'
   });
 
+
+
   constructor(private http: HttpClient) {}
 
   // Add a document to the database
@@ -39,8 +41,9 @@ export class CouchService {
 addUser(data: any) {
   return this.http.post<any>(this.baseURL, data, { headers: this.headers });
 }
-profileUpdate(id:string,data:any){
-  return this.http.put<any>(`${this.baseURL}/${id}`,data, { headers: this.headers })
+profileUpdate(id:string,data:any,rev:any){
+  const updatedData={...data,_rev:rev};
+  return this.http.put<any>(`${this.baseURL}/${id}`,updatedData, { headers: this.headers })
 }
 addLoginDetails(data: any) {
   return this.http.post<any>(this.baseURL, data, { headers: this.headers });
@@ -49,7 +52,7 @@ getUserDetails(): any {
   return this.http.get(`https://192.168.57.185:5984/scano/_design/view/_view/users_by_id`, { headers: this.headers });
 }
 getUserDetailById(_id: string) {
-  return this.http.get<any>(`https://192.168.57.185:5984/scano/_design/view/_view/users_by_id?key="${_id}"`, { headers: this.headers });
+  return this.http.get<any>(`https://192.168.57.185:5984/scano/_design/view/_view/users_by_id?include_docs=true&key="${_id}"`, { headers: this.headers });
 }
 
 updatePassword(_id: string, data: any) {
@@ -58,6 +61,15 @@ updatePassword(_id: string, data: any) {
 }
 validateUserByEmail(email: string) {
   return this.http.get<any>(`https://192.168.57.185:5984/scano/_design/view/_view/authenticate_by_email?key="${email}"`, { headers: this.headers });
+}
+
+getcardetails(){
+  return this.http.get<any>(`${this.baseURL}/_design/view/_view/cardDetails_by_imageurl?include_docs=true`,{headers: this.headers });
+}
+
+addcarddetails(carddata:any){
+  return this.http.post<any>(this.baseURL, carddata, { headers: this.headers });
+
 }
 
 }

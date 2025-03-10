@@ -2,15 +2,17 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { CouchService } from '../../Services/couch.service';
 import { FormsModule } from '@angular/forms';
+import { SidebarComponent } from "../sidebar/sidebar.component";
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule, FormsModule, SidebarComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
 export class ProfileComponent {
+  rev: string='';
   constructor(readonly couch: CouchService) { }
   profileDetail: any = {}
   phoneNumber: string = ''
@@ -29,12 +31,16 @@ export class ProfileComponent {
   ngOnInit() {
     this.userId = localStorage.getItem("userId")!
     console.log(this.userId);
+    this.getProfileDetails()
+    
 
-    console.log(this.userId)
+  }
+
+  getProfileDetails(){
     this.couch.getUserDetailById(this.userId).subscribe({
       next: (response: any) => {
         console.log(response)
-        this.profileDetail = response.rows[0].value
+        this.profileDetail = response.rows[0].doc
         this.email = this.profileDetail.data.email
         this.userName = this.profileDetail.data.userName
         this.gender = this.profileDetail.data.gender
@@ -43,11 +49,9 @@ export class ProfileComponent {
         this.lastName = this.profileDetail.data.lastName
         this.phoneNumber = this.profileDetail.data.phoneNumber
         this.images = this.profileDetail.data.images
-
-
+        this.rev=this.profileDetail._rev        
       }
     })
-
   }
   onImageChange(event: any): void {
     const file = event.target.files[0];
@@ -60,7 +64,7 @@ export class ProfileComponent {
     }
   }
   saveDetail() {
-    console.log(this.profileDetail);
+   
 
     const data = {
       ...this.profileDetail,
@@ -71,21 +75,27 @@ export class ProfileComponent {
         lastName: this.lastName,
         phone: this.phone,
         userName: this.userName,
-        images: this.images
+        images: this.images,
+
 
       }
+     
+      
 
     }
-    this.couch.profileUpdate(this.profileDetail._id, data).subscribe({
+    this.couch.profileUpdate(this.profileDetail._id, data,this.rev).subscribe({
       next: (response) => {
         alert('update successfully')
+        this.getProfileDetails()
+      
+        
 
       },
       error: () => {
-        alert('Error ');
+        alert('Please Refresh and try again ');
       },
     });
-    this.isDisableEditing = false;
+    this.isDisableEditing = true;
   }
   editProfile() {
     this.isDisableEditing = false;

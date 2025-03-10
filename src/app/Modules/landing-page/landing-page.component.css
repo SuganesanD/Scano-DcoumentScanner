@@ -3,11 +3,16 @@
   }
   html{
     scroll-behavior: smooth;
+    transition: all 0.3s ease-in-out;
+   
   }
   body {
     font-family: Verdana, sans-serif;
     margin: 0;
     background-color: whitesmoke;
+    scroll-behavior: smooth;
+    transition: all 0.3s ease-in-out;
+    
     
   }
   
@@ -406,3 +411,5 @@
       border-radius: 20px;
       padding: 10px;
   }
+
+  

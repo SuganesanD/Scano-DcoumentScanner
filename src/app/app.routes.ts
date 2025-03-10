@@ -8,6 +8,8 @@ import { FileUploadComponent } from './Modules/file-upload/file-upload.component
 import { ImagetoPdfComponent } from './Modules/imageto-pdf/imageto-pdf.component';
 import { LoginPageComponent } from './Modules/login-page/login-page.component';
 import { ProfileComponent } from './Modules/profile/profile.component';
+import { AbicardComponent } from './Modules/abicard/abicard.component';
+import { ChatBotComponent } from './Modules/chat-bot/chat-bot.component';
 
 export const routes: Routes = [
     {path:'',component:LandingPageComponent
@@ -22,6 +24,8 @@ export const routes: Routes = [
     {path:'login',component:LoginPageComponent},
     {path:'profile',component:ProfileComponent
     },
+    {path:'abicard',component:AbicardComponent},
+    {path:'chat',component:ChatBotComponent}
 
     
 ];

@@ -1,21 +1,9 @@
 
 <div class="container">
-    <!-- Sidebar (20%) -->
-    <div class="box box1">
-  
-      <img [src]="images" alt="img" class="profile-pic">
-      <div *ngIf="!images">No Profile Picture</div>
-  
-      <ul class="menu-list">
-        <li routerLink="/profile">Profile</li>
-        <li routerLink="/history">File records</li>
-        <li routerLink=""> Dashboard</li>
-        <li routerLink="/logout">logout</li>
-      </ul>
-  
-  
-      <div class="footer" [routerLink]="['logout']">Footer</div>
-    </div>
+  <div class="box box1">
+    <app-sidebar></app-sidebar>
+  </div>
+    
   
     <!-- Middle Section (50%) -->
     <div class="box box2">
@@ -26,12 +14,21 @@
       <div class="modal" *ngIf="isModalOpen">
         <div class="modal-content">
           <span class="close-btn" (click)="closeModal()">&times;</span>
+          <div class="pdfconvertor" *ngIf="isPdfConvertorOpen">
           <h2>Choose your action</h2>
           <div class="btn-group">
             <button class="btn" routerLink="/img"><img src="../../assets/images/img.png"  alt="img
               " width="48px" height="48px"> To <img src="../../assets/images/pdf-file.png" alt="image" width="48px" height="48px"></button>
             <button class="btn" routerLink="/doc"><img src="../../assets/images/docx.png" alt="image" width="48px" height="48px"> To <img src="../../assets/pdf-file.png" alt="image" width="48px" height="48px"></button>
           </div>
+        </div>
+          <!-- <div class="logout" *ngIf="logout">
+            <img  src="\assets\logoutimg.png" alt="li"><br>
+            <h3>Oh no! You're Leaving....</h3>
+            <h3>Are you sure?</h3>
+            <button  [routerLink]="['/home']">No,Just Kidding</button><br><br>
+            <button  [routerLink]="['']"> Yes, Log Me Out</button>
+        </div> -->
         </div>
       </div>
   

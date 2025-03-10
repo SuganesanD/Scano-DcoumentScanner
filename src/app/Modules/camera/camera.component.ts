@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import Tesseract from 'tesseract.js';
 import { CouchService } from '../../Services/couch.service';
@@ -7,11 +7,12 @@ import { HttpClient } from '@angular/common/http';
 import {v4 as uuidv4} from 'uuid';
 import { ChatbotService } from '../../Services/chatbot.service';
 import * as cv from '@techstark/opencv-js'
+import { ChatBotComponent } from "../chat-bot/chat-bot.component";
 
 @Component({
   selector: 'app-camera',
   standalone: true,
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule, FormsModule, ChatBotComponent],
   templateUrl: './camera.component.html',
   styleUrl: './camera.component.css'
 })
@@ -37,8 +38,9 @@ export class CameraComponent {
   document_name:string='capturedImage';
   finalCapturedPhoto: string='';
   summarizedText: string='';
-  extractedTextfinal: string='';
- constructor(readonly couch:CouchService,readonly http: HttpClient,readonly chat :ChatbotService){}
+ extractedTextfinal: string='';
+  summarylevel:string="Give me a general paragraph on"
+ constructor(readonly couch:CouchService,readonly http: HttpClient,private chat :ChatbotService){}
   ngOnInit(): void {
     this.initializeCamera();
   }
@@ -88,6 +90,7 @@ export class CameraComponent {
   }
 
   capturePhoto(): void {
+    
     const video = this.videoElement.nativeElement;
     const canvas = this.canvasElement.nativeElement;
     const context = canvas.getContext('2d');
@@ -242,6 +245,10 @@ export class CameraComponent {
       this.extractedText=text
       console.log(this.extractedText);
             // this.selectedContents.push(text);
+            this.chat.extractedText=this.extractedText
+            this.chat.summarylevel=this.summarylevel
+            
+            
     })
     .catch((error) => console.error('OCR Error:', error));
 
@@ -307,36 +314,37 @@ generateuuid(){
 
 botResponse: string = '';
 
+}
 
 
 
-sendMessage(): void {
-  if (this.extractedText.trim()) {
-    this.extractedTextfinal=this.extractedText
-    // Add user message to the chat
+// sendMessage(): void {
+//   if (this.extractedText.trim()) {
+//     this.extractedTextfinal=this.extractedText
+//     // Add user message to the chat
    
     
 
-    // Get response from the chatbot API
-    this.chat.getResponse(this.extractedText).subscribe(response => {
+//     // Get response from the chatbot API
+//     this.chat.getResponse(this.extractedText).subscribe(response => {
       
-      this.summarizedText=response.candidates[0].content.parts[0].text
+//       this.summarizedText=response.candidates[0].content.parts[0].text
   
     
-    });
-    console.log(this.extractedText);
-    console.log(this.summarizedText)
+//     });
+//     console.log(this.extractedText);
+//     console.log(this.summarizedText)
     
     
     
     
 
 
-    // Clear the input field
-    this.extractedText = '';
-  }
-}
+//     // Clear the input field
+//     this.extractedText = '';
+//   }
+// }
 
 
 
-}
+
