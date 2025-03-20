@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import mammoth from 'mammoth';
-
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { PdfViewerComponent, PdfViewerModule } from 'ng2-pdf-viewer';
 import { saveAs } from 'file-saver';
@@ -10,11 +9,13 @@ import Tesseract from 'tesseract.js';
 import { CouchService } from '../../Services/couch.service';
 import { ChatbotService } from '../../Services/chatbot.service';
 import { FormsModule } from '@angular/forms';
+import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar'
+import { HorizontalPosition } from 'docx';
 
 @Component({
   selector: 'app-file-upload',
   standalone: true,
-  imports: [FormsModule,CommonModule,PdfViewerModule],
+  imports: [FormsModule,CommonModule,PdfViewerModule,MatSnackBarModule],
   templateUrl: './file-upload.component.html',
   styleUrl: './file-upload.component.css'
 })
@@ -34,7 +35,9 @@ export class FileUploadComponent {
   selectedTextval:boolean=false
 
   documentid:string=''
-  userid:string="user_2_81115f40-d069-48d1-995b-abd58f13e10b"
+  userid:string=localStorage.getItem("userId")||''
+ 
+  
   document_name:string=''
   document_type:string=''
   pdfSrc: string | undefined;
@@ -67,12 +70,12 @@ export class FileUploadComponent {
   
 
   
-  constructor(private http: HttpClient,private documentViewerService: CouchService,private chatbotService:ChatbotService) {
+  constructor(private http: HttpClient,private documentViewerService: CouchService,private chatbotService:ChatbotService,private readonly snackBar:MatSnackBar) {
     this.cropCanvas = document.createElement('canvas');
   }
 
   generateuuid(){
-    this.documentid=`document_2_"${uuidv4()}"`;
+    this.documentid=`document_2_${uuidv4()}`;
   }
 
   onFileChange(event: any) {
@@ -85,6 +88,7 @@ export class FileUploadComponent {
     this.pdfSrc=''
     this.fileContent=''
     this.textChunks=[]
+    console.log(this.userid);
 
     if (file) {
       if (file.type.startsWith('image')) {
@@ -112,7 +116,7 @@ export class FileUploadComponent {
 
         console.log("File Content Before Encoding:", this.fileContent);
 
-        // Convert to Base64 properly without using unescape()
+      
         const textEncoder = new TextEncoder();
         const encodedText = btoa(String.fromCharCode(...new Uint8Array(textEncoder.encode(this.fileContent))));
 
@@ -259,7 +263,7 @@ afterLoadComplete(pdf: any) {
 
   // Go to the next page
   nextPage() {
-    if (this.currentPage <this.totalPages||this.textChunks.length) {
+    if (this.currentPage <this.totalPages || this.textChunks.length) {
       this.currentPage++;
     }
   }
@@ -461,35 +465,35 @@ sendMessage(): void {
     }
   }
 
-  convertToBase64(data: any): Promise<string> {
-    return new Promise((resolve, reject) => {
-      if (typeof data === 'string') {
-        // Convert a text string to Base64
-        resolve(btoa(unescape(encodeURIComponent(data))));
-      } 
-      else if (data instanceof ArrayBuffer) {
-        // Convert an ArrayBuffer (e.g., from DOCX) to Base64
-        const uint8Array = new Uint8Array(data);
-        let binaryString = '';
-        uint8Array.forEach((byte) => {
-          binaryString += String.fromCharCode(byte);
-        });
-        resolve(btoa(binaryString));
-      } 
-      else if (data instanceof File || data instanceof Blob) {
-        const reader = new FileReader();
-        reader.onload = () => {
-          const result = reader.result as string;
-          resolve(result.split(',')[1]); // Remove metadata
-        };
-        reader.onerror = (error) => reject(error);
-        reader.readAsDataURL(data);
-      } 
-      else {
-        reject(new Error('Unsupported data type for Base64 conversion.'));
-      }
-    });
-  }
+  // convertToBase64(data: any): Promise<string> {
+  //   return new Promise((resolve, reject) => {
+  //     if (typeof data === 'string') {
+  //       // Convert a text string to Base64
+  //       resolve(btoa(unescape(encodeURIComponent(data))));
+  //     } 
+  //     else if (data instanceof ArrayBuffer) {
+  //       // Convert an ArrayBuffer (e.g., from DOCX) to Base64
+  //       const uint8Array = new Uint8Array(data);
+  //       let binaryString = '';
+  //       uint8Array.forEach((byte) => {
+  //         binaryString += String.fromCharCode(byte);
+  //       });
+  //       resolve(btoa(binaryString));
+  //     } 
+  //     else if (data instanceof File || data instanceof Blob) {
+  //       const reader = new FileReader();
+  //       reader.onload = () => {
+  //         const result = reader.result as string;
+  //         resolve(result.split(',')[1]); // Remove metadata
+  //       };
+  //       reader.onerror = (error) => reject(error);
+  //       reader.readAsDataURL(data);
+  //     } 
+  //     else {
+  //       reject(new Error('Unsupported data type for Base64 conversion.'));
+  //     }
+  //   });
+  // }
   
   
   
@@ -671,8 +675,6 @@ selectFullImage() {
 
   addtocouch(){
     this.generateuuid();
-    console.log(this.documentid);
-   
     const document_data={
       _id: this.documentid,  
       data:{
@@ -690,14 +692,8 @@ selectFullImage() {
            // Base64 encoded attachment content
         }  
     }
-  }
-  console.log(document_data);
-  console.log(this.pdfSrc);
-  
-  
-    
-    if(this.document_name ){
-      console.log("inside the add");
+  } 
+    if(this.document_name && this.summarizedContent ){
       
     this.documentViewerService.add_document(document_data).subscribe({
       next:(response)=>{
@@ -705,10 +701,26 @@ selectFullImage() {
         
         console.log(response);
       },
-      error:(error)=>{
+      error:(error)=>{ 
         alert("ooops! document_data is not added!");
       }
     })
+  }
+  else if( this.summarizedContent){
+    this.snackBar.open("please summarize your uploaded file to view file and summary",'Close', {
+      verticalPosition:'top',
+      horizontalPosition:"center",
+      duration: 3000,
+      panelClass: ['snackbar-warning']});
+
+  }
+
+  else{
+    this.snackBar.open("Please upload file and summarize to view the files in the file history",'Close', {
+      verticalPosition:'top',
+      horizontalPosition:"center",
+      duration: 3000,
+      panelClass: ['snackbar-warning']});
   }
   }
 

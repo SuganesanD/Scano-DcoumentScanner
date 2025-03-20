@@ -48,9 +48,7 @@ profileUpdate(id:string,data:any,rev:any){
 addLoginDetails(data: any) {
   return this.http.post<any>(this.baseURL, data, { headers: this.headers });
 }
-getUserDetails(): any {
-  return this.http.get(`https://192.168.57.185:5984/scano/_design/view/_view/users_by_id`, { headers: this.headers });
-}
+
 getUserDetailById(_id: string) {
   return this.http.get<any>(`https://192.168.57.185:5984/scano/_design/view/_view/users_by_id?include_docs=true&key="${_id}"`, { headers: this.headers });
 }
@@ -63,13 +61,12 @@ validateUserByEmail(email: string) {
   return this.http.get<any>(`https://192.168.57.185:5984/scano/_design/view/_view/authenticate_by_email?key="${email}"`, { headers: this.headers });
 }
 
-getcardetails(){
-  return this.http.get<any>(`${this.baseURL}/_design/view/_view/cardDetails_by_imageurl?include_docs=true`,{headers: this.headers });
+
+
+isLoggedIn(): boolean {
+  return localStorage.getItem('userId') !== null;
 }
-
-addcarddetails(carddata:any){
-  return this.http.post<any>(this.baseURL, carddata, { headers: this.headers });
-
+logout(): void {
+  localStorage.removeItem('userId');  // Remove the token
 }
-
 }

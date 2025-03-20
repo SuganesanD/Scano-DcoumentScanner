@@ -28,7 +28,17 @@
     
 </div>
 <p>{{extractedText}}</p>
-<app-chat-bot [extractedText]="extractedText"></app-chat-bot>
+<app-chat-bot [extractedText]="extractedText"  (valueEmitter)="receiveExtractedText($event)"></app-chat-bot>
+<div class="filehistory" *ngIf="userid">
+ 
+  <button 
+    *ngIf="capturedPhoto && summarizedText"  
+    (click)="addtocouch()" 
+    [disabled]="!capturedPhoto || !summarizedText">
+    Go to file history 
+  </button>
+</div>
+
 
 
   

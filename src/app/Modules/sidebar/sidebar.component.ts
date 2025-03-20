@@ -31,6 +31,23 @@ router=inject(Router)
       }
     });
   }
+
+  menuItems = ['Home', 'Profile', 'File History'];  // Example items
+  selectedItem: string | null = null;
+
+
+  setActive(menuItem: string): void {
+    this.selectedItem = menuItem;
+    if(this.selectedItem=="Home"){
+      this.router.navigate(["Home"])
+    }
+    else if(this.selectedItem=="Profile"){
+      this.router.navigate(["Profile"])
+    }
+    else if(this.selectedItem=="File History"){
+      this.router.navigate(["FileHistory"])
+    }
+  }
  
    openModal() {
    
@@ -46,6 +63,7 @@ router=inject(Router)
     // Perform logout logic (e.g., clear session, navigate to login)
     console.log('User logged out');
     this.isModalOpen = false;
+    localStorage.removeItem(this.userId)
     this.router.navigate(['/login']); // Redirect to login page
   }
 

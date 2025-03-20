@@ -9,6 +9,7 @@ export class ChatbotService implements OnInit{
 
   extractedText:string=''
   summarylevel:string=''
+  summarizedText:string=''
   
   ngOnInit(){
     console.log(this.extractedText);  

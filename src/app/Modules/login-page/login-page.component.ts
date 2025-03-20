@@ -5,10 +5,11 @@ import {  inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-login-page',
   standalone: true,
-  imports: [FormsModule,CommonModule],
+  imports: [FormsModule,CommonModule,MatSnackBarModule],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.css'
 })
@@ -62,7 +63,7 @@ export class LoginPageComponent {
   generateUuidLoginDetails() {
     this.loginDetails = uuidv4()
   }
-  constructor(readonly couch: CouchService) { }
+  constructor(readonly couch: CouchService,private readonly snackBar:MatSnackBar) { }
 
   // Form toggling methods
   showRegistrationForm() {
@@ -107,7 +108,7 @@ export class LoginPageComponent {
 
   // User Registration
   create() {
-    this.couch.getUserDetails().subscribe({
+    this.couch.validateUserByEmail(this.Email).subscribe({
       next: (response: any) => {
         let emailExists = false;
 
@@ -179,7 +180,7 @@ export class LoginPageComponent {
         let status = false;
         console.log(response)
         response.rows.map((e: any) => {
-          if (e.value.email === this.Email && e.value.password === this.Password) {
+          if (e.value.data.email === this.Email && e.value.data.password === this.Password) {
             status = true;
             this.userid=e.value._id
             localStorage.setItem("userId", this.userid)
@@ -199,18 +200,32 @@ export class LoginPageComponent {
 
           }
         });
+        this.couch.isLoggedIn()
 
         if (status) {
-          alert('Login successful');
+          this.snackBar.open('Login successful','close',{
+            verticalPosition:'top',
+            horizontalPosition:"center",
+            duration: 3000,
+            panelClass: ['snackbar-success']});
+
           // Navigate to another page after login
           console.log(localStorage.getItem("userId"))
-          this.routerVariable.navigate(['home'])
+          this.routerVariable.navigate(['Home'])
         } else {
-          alert('Login failed');
+           this.snackBar.open('Login failed','close',{
+            verticalPosition:'top',
+            horizontalPosition:"center",
+            duration: 3000,
+            panelClass: ['snackbar-error']});
         }
       },
       error: () => {
-        alert('Error occurred while verifying user');
+        this.snackBar.open('Error occurred while verifying user','close',{
+          verticalPosition:'top',
+          horizontalPosition:"center",
+          duration: 3000,
+          panelClass: ['snackbar-error']});
       },
     });
     
@@ -246,7 +261,7 @@ export class LoginPageComponent {
   resetPassword() {
     if (this.NewPassword === this.NewConfirmPassword) {
       // If the passwords match, update the password in the database
-      this.couch.getUserDetails().subscribe({
+      this.couch.validateUserByEmail(this.Email).subscribe({
         next: (response: any) => {
           const existData = response.rows.map((user: any) => user.value).find((user: any) => user.data.email === this.Email)
           console.log(existData);

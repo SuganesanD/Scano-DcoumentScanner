@@ -1,25 +1,55 @@
 <div class="maincontainer">
-  <div class="box box1">
-    <app-sidebar></app-sidebar>
-  </div>
-
+  
 
   <div class="filehistory">
     <div class="heading">
-      <p>View and Download all your files and summarizd content here and track your progress🕵️</p>
+      <h2>View and Download all your files and summarizd content here and track your progress🕵️</h2>
     </div>
 
+
+
     <div class="filehistorycontainer">
-      <div id="chart" class="chartcontainer">
+      <div class="chartcontainer">
+
+        <div class="piechartcontainer">
+          <h3>Total files uploaded</h3>
+          <div id="chart" class="piechart"></div>
+        </div>
+        
+        
+
+        <div id="lineChart" class="linechart">
+          <h3>Files uploaded in particular interval</h3>
+        </div>
       </div>
-      <div class="togglecontainer">
-        <p>Sort Order: <strong>{{ sortOrder === 'asc' ? 'Ascending ⬆️' : 'Descending ⬇️' }}</strong></p>
-        <label class="toggle-switch">
-          <input type="checkbox" (change)="toggleSortOrder()" [checked]="sortOrder === 'desc'">
-          <span class="slider"></span>
-        </label>
+     
+
+
+      <div class="filtercontainer">
+        <div class="filter">
+          <label for="dateFilter">Filter by Date:</label>
+          <select id="dateFilter" [(ngModel)]="selectedDateFilter" (change)="applyDateFilter()">
+            <option value="all">All Documents</option>
+            <option value="last3days">Last 3 Days</option>
+            <option value="last7days">Last 7 Days</option>
+            <option value="last30days">Last 30 Days</option>
+
+          </select>
+        </div>
+
+
+        <div class="togglecontainer">
+          <p>Sort Order: <strong>{{ sortOrder === 'asc' ? 'Ascending ⬆️' : 'Descending ⬇️' }}</strong></p>
+          <label class="toggle-switch">
+            <input type="checkbox" (change)="toggleSortOrder()" [checked]="sortOrder === 'desc'">
+            <span class="slider"></span>
+          </label>
+
+        </div>
 
       </div>
+
+
 
 
 
@@ -27,20 +57,22 @@
       <table>
         <thead>
           <tr>
-           
+            <th>Date</th>
             <th>Document Name</th>
             <th>Summarized content</th>
-            <th>Date</th>
+            
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let doc of getdata">
-          
+          <tr *ngFor="let doc of filteredData">
+            <td>{{ doc.date }}</td>
             <td>
               {{ doc.document_name }}
               <div class="actionsbuttons">
                 <button (click)="displayContentsample(doc.file, doc.fileType)">View</button>
-                <img src="\assets\images\download.png" (click)="downloadFileauth(doc.file, doc.fileType, doc.document_name)"style="height: 20px; width: auto;" alt="">
+                <img src="\assets\images\download.png"
+                  (click)="downloadFileauth(doc.file, doc.fileType, doc.document_name)"
+                  style="height: 20px; width: auto;" alt="">
 
               </div>
             </td>
@@ -48,12 +80,13 @@
               {{doc.summarized_document_name}}
               <div class="actionsbuttons">
                 <button (click)="displayContentSummary(doc.summarized_document_content)">View</button>
-                <img src="\assets\images\download.png"  (click)="showselectformat(doc.summarized_document_content)"style="height: 20px; width: auto;" alt="">
+                <img src="\assets\images\download.png" (click)="showselectformat(doc.summarized_document_content)"
+                  style="height: 20px; width: auto;" alt="">
 
               </div>
             </td>
 
-            <td>{{ doc.date }}</td>
+           
 
           </tr>
         </tbody>

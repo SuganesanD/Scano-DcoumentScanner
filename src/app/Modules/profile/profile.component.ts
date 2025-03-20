@@ -12,12 +12,13 @@ import { SidebarComponent } from "../sidebar/sidebar.component";
   styleUrl: './profile.component.css'
 })
 export class ProfileComponent {
-  rev: string='';
+ 
   constructor(readonly couch: CouchService) { }
   profileDetail: any = {}
   phoneNumber: string = ''
   userId: string = ''
   images: string = ''
+  rev: string='';
   file: File | null = null
   firstName: string = ''
   lastName: string = ''
@@ -29,7 +30,7 @@ export class ProfileComponent {
 
   // Add this method in your TestComponent class
   ngOnInit() {
-    this.userId = localStorage.getItem("userId")!
+    this.userId = localStorage.getItem('userId')!
     console.log(this.userId);
     this.getProfileDetails()
     

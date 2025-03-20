@@ -8,23 +8,22 @@ import { FileUploadComponent } from './Modules/file-upload/file-upload.component
 import { ImagetoPdfComponent } from './Modules/imageto-pdf/imageto-pdf.component';
 import { LoginPageComponent } from './Modules/login-page/login-page.component';
 import { ProfileComponent } from './Modules/profile/profile.component';
-import { AbicardComponent } from './Modules/abicard/abicard.component';
 import { ChatBotComponent } from './Modules/chat-bot/chat-bot.component';
+import { authGuard } from './auth.guard';
+
 
 export const routes: Routes = [
-    {path:'',component:LandingPageComponent
-    },
-    {path:'home',component:HomePageComponent
+    {path:'',component:LandingPageComponent},
+    {path:'Home',component:HomePageComponent
     },{path:'camera',component:CameraComponent
     },{path:'doc',component:DocxtoPdfComponent
-    },{path:'history',component:FileHistoryComponent
+    },{path:'FileHistory',component:FileHistoryComponent
     },{path:'upload',component:FileUploadComponent
     },{path:'img',component:ImagetoPdfComponent
     },
     {path:'login',component:LoginPageComponent},
-    {path:'profile',component:ProfileComponent
+    {path:'Profile',component:ProfileComponent
     },
-    {path:'abicard',component:AbicardComponent},
     {path:'chat',component:ChatBotComponent}
 
     

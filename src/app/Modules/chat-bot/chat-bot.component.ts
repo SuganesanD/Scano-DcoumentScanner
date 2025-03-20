@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output} from '@angular/core';
 import { ChatbotService } from '../../Services/chatbot.service';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -30,6 +30,7 @@ export class ChatBotComponent  {
 
   @Input() extractedText = this.chat.extractedText;
   @Input()summarylevel=this.chat.summarylevel
+  @Output() valueEmitter = new EventEmitter<string>();
   
 
 
@@ -46,13 +47,19 @@ export class ChatBotComponent  {
       this.chat.getResponse(this.extractedTextfinal,summarylevel).subscribe(response => {
 
         this.summarizedText = response.candidates[0].content.parts[0].text
+        
+
         this.summarylevel=''
+        this.valueEmitter.emit(this.summarizedText);
+       
+        
 
 
 
       });
       console.log(this.extractedText);
       console.log(this.summarizedText)
+     
 
 
 
@@ -66,5 +73,7 @@ export class ChatBotComponent  {
   generateuuid() {
     this.documentid = `document_2_"${uuidv4()}"`;
   }
+
+  
 
 }

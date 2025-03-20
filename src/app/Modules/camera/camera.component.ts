@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, output, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import Tesseract from 'tesseract.js';
 import { CouchService } from '../../Services/couch.service';
@@ -8,6 +8,7 @@ import {v4 as uuidv4} from 'uuid';
 import { ChatbotService } from '../../Services/chatbot.service';
 import * as cv from '@techstark/opencv-js'
 import { ChatBotComponent } from "../chat-bot/chat-bot.component";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-camera',
@@ -40,6 +41,8 @@ export class CameraComponent {
   summarizedText: string='';
  extractedTextfinal: string='';
   summarylevel:string="Give me a general paragraph on"
+
+  routes=inject(Router)
  constructor(readonly couch:CouchService,readonly http: HttpClient,private chat :ChatbotService){}
   ngOnInit(): void {
     this.initializeCamera();
@@ -288,6 +291,9 @@ addtocouch(){
 }
 console.log(document_data);
 console.log(this.capturedPhoto)
+this.summarizedText=this.chat.summarizedText
+console.log(this.summarizedText);
+
 
 
 
@@ -301,6 +307,8 @@ console.log(this.capturedPhoto)
       alert("document_data added successfully");
       
       console.log(response);
+      this.routes.navigate(['/File History'])
+      
     },
     error:(error)=>{
       alert("oops! document_data is not added!");
@@ -313,6 +321,10 @@ generateuuid(){
 }
 
 botResponse: string = '';
+
+receiveExtractedText(text: string) {
+  this.summarizedText = text; // Store received text
+}
 
 }
 

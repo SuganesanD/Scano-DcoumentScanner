@@ -46,6 +46,6 @@ export class LandingPageComponent {
     this.dots[this.slideIndex - 1].classList.add('active');
 
     // Change slide every 5 seconds
-    setTimeout(() => this.showSlides(), 5000);
+    setTimeout(() => this.showSlides(), 2000);
   }
 }
